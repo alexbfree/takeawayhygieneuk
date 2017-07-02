@@ -14,7 +14,6 @@ chrome.runtime.onMessage.addListener(
                 beforeSend: function(request) {
                     // The FSA API requires you to set this header to work.
                     request.setRequestHeader('x-api-version', 2);
-                    console.log(request);
                 },
                 dataType: 'json',
                 url: apiUrl
@@ -42,10 +41,6 @@ chrome.runtime.onMessage.addListener(
             })
             .fail(function(data, status, error) {
                 sendResponse({ 'success': false });
-            })
-            .always(function(data, status) {
-                console.log(data);
-                console.log(apiUrl);
             });
         } else {
             sendResponse({ 'success': false });
