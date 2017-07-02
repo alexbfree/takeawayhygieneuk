@@ -38,9 +38,4 @@
   "web_accessible_resources": [
     "/images/ratings/*"
   ]
-  // "browser_action": {
-  //   "default_title": "",
-  //   "default_icon": "",
-  //   "default_popup": ""
-  // }
 }
