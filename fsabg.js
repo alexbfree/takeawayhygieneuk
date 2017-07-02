@@ -1,5 +1,8 @@
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {        
+        // Yes, we're only using the postcode.
+        // Yes, I could extract it separately, but I'm leaving it open to all in case we
+        // can amend this in future.
         var bizName = request.name;
         var bizAddress = [ request.street, request.city, request.postcode ];
         var bizAddressString = bizAddress[2];
@@ -22,8 +25,8 @@ chrome.runtime.onMessage.addListener(
             .done(function(data, status) {
                 var jsonMsg;
                 
-                var resultCount = Object.keys(data.establishments).length;
                 // Check we've actually received some results!
+                var resultCount = Object.keys(data.establishments).length;
                 if ( resultCount === 1 ) {
                     jsonMsg = {
                         'success': true,
