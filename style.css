@@ -9,5 +9,8 @@ label.fsadatelabel {
 
 span.fsanorating {
     font-size: 12px;
+}
+
+.fsaheader {
     font-weight: bold;
 }

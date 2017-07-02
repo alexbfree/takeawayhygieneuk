@@ -38,7 +38,8 @@ chrome.runtime.sendMessage({'name': businessName, 'street': businessStreet, 'cit
             ratingContent =
 `
 <span class='fsapanel fsanorating'>
-    No FSA Hygiene rating found!
+    <p class="fsaheader">No FSA Hygiene rating found!</p>
+    <p>Try searching on <a href="http://ratings.food.gov.uk/">the FSA website!</a></p>
 </span>
 `;
         } else if (response.results > 1) {
