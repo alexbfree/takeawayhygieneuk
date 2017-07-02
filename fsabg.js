@@ -12,7 +12,7 @@ chrome.runtime.onMessage.addListener(
         // Check we haven't received empty strings...
         if (( bizName === '' && bizAddress === '' ) === false) {
             // Build our full API URL.
-            var apiCall = 'Establishments?name=' + bizName + '&address=' + bizAddressString;
+            var apiCall = 'Establishments?name=' + encodeURIComponent(bizName) + '&address=' + encodeURIComponent(bizAddressString);
             var apiUrl = apiBase + apiCall;
             $.ajax({
                 beforeSend: function(request, settings) {
