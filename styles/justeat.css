@@ -1,13 +1,10 @@
 div.fsapanel {
     margin: 5px;
+    font-size: 12px;
 }
 
 label.fsadatelabel {
 	font-weight: bold;
-}
-
-div.fsanorating {
-    font-size: 11px;
 }
 
 .fsaheader {
