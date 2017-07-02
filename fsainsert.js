@@ -6,10 +6,10 @@ function escapeHtml(str) {
 }
 
 // Let's get our search parameters out of the page!
-var businessName = $("div.details > h1.name").text().trim();
-var businessAddress = $("div.details > p.address").text().replace(/\s+/g, ' ').trim();
+var businessName = $('div.details > h1.name').text().trim();
+var businessAddress = $('div.details > p.address').text().replace(/\s+/g, ' ').trim();
 
-chrome.runtime.sendMessage({"name": businessName, "address": businessAddress}, function(response) {
+chrome.runtime.sendMessage({'name': businessName, 'address': businessAddress}, function(response) {
     var ratingContent;
     if ( response.success === true ) {
         var fsaRating = response.rating;
