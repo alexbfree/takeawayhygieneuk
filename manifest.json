@@ -4,11 +4,11 @@
   "version": "0.1",
   "description": "Adds Food Standard Agency ratings to takeaway sites.",
   "icons": {
-    "16": "icon_16.png",
-    "32": "icon_32.png",
-    "64": "icon_64.png",
-    "128": "icon_128.png",
-	"256": "icon_256.png"
+    "16": "/icons/icon_16.png",
+    "32": "/icons/icon_32.png",
+    "64": "/icons/icon_64.png",
+    "128": "/icons/icon_128.png",
+	"256": "/icons/icon_256.png"
   },
   "content_scripts": [{
 	"matches": [
