@@ -47,6 +47,7 @@ chrome.runtime.onMessage.addListener(
                 sendResponse(jsonMsg);
             })
             .fail(function(data, status, error) {
+                console.log('Call to API failed: ' + status);
                 sendResponse({ 'success': false });
             });
         } else {
