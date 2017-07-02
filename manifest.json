@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
-  "name": "Takeaway Food Ratings",
-  "version": "0.1",
+  "name": "Takeaway Hygiene Ratings",
+  "version": "1.0",
   "description": "Adds Food Standard Agency ratings to takeaway sites.",
   "icons": {
     "16": "/icons/icon_16.png",
