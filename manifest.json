@@ -1,0 +1,46 @@
+{
+  "manifest_version": 2,
+  "name": "Takeaway Food Ratings",
+  "version": "0.1",
+  "description": "Adds Food Standard Agency ratings to takeaway sites.",
+  "icons": {
+    "16": "icon_16.png",
+    "32": "icon_32.png",
+    "64": "icon_64.png",
+    "128": "icon_128.png",
+	"256": "icon_256.png"
+  },
+  "content_scripts": [{
+	"matches": [
+	  "https://www.just-eat.co.uk/*/menu",
+	  "https://www.just-eat.co.uk/*/menu#*"
+	],
+	"js": [
+	  "jquery-3.2.1.min.js",
+	  "fsainsert.js"
+    ],
+    "css": [
+      "style.css"
+    ],
+    "run_at": "document_end"
+  }],
+  "background": {
+    "persistent": false,
+    "scripts": [
+	  "fsabg.js",
+	  "jquery-3.2.1.min.js"
+	]
+  },
+  "permissions": [
+    "tabs",
+    "http://ratings.food.gov.uk/*"
+  ],
+  "web_accessible_resources": [
+    "/images/ratings/*"
+  ]
+  // "browser_action": {
+  //   "default_title": "",
+  //   "default_icon": "",
+  //   "default_popup": ""
+  // }
+}
