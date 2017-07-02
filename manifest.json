@@ -20,7 +20,7 @@
 	  "fsainsert.js"
     ],
     "css": [
-      "style-justeat.css"
+      "/styles/justeat.css"
     ],
     "run_at": "document_end"
   },
@@ -33,7 +33,7 @@
 	  "fsainsert.js"
     ],
     "css": [
-        "style-hungryhouse.css"
+        "/styles/hungryhouse.css"
     ],
     "run_at": "document_end"
   }],
