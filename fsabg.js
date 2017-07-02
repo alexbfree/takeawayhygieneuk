@@ -1,17 +1,18 @@
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {        
-        var businessName = request.name;
-        var businessAddress = request.address;
+        var bizName = request.name;
+        var bizAddress = [ request.street, request.city, request.postcode ];
+        var bizAddressString = bizAddress[2];
         
         var apiBase = 'http://api.ratings.food.gov.uk/';
         
         // Check we haven't received empty strings...
-        if (( businessName === "" && businessAddress === "" ) === false) {
+        if (( bizName === '' && bizAddress === '' ) === false) {
             // Build our full API URL.
-            var apiCall = 'Establishments?name=' + businessName + '&address=' + businessAddress;
+            var apiCall = 'Establishments?name=' + bizName + '&address=' + bizAddressString;
             var apiUrl = apiBase + apiCall;
             $.ajax({
-                beforeSend: function(request) {
+                beforeSend: function(request, settings) {
                     // The FSA API requires you to set this header to work.
                     request.setRequestHeader('x-api-version', 2);
                 },
@@ -31,13 +32,20 @@ chrome.runtime.onMessage.addListener(
                         'date': data.establishments[0].RatingDate,
                         'results': resultCount
                     };
+                } else if (resultCount === 0 ) {
+                    jsonMsg = {
+                        'success': false,
+                        'results': resultCount
+                    };
                 } else {
                     jsonMsg = {
                         'success': false,
                         'results': resultCount
                     };
                 }
-                sendResponse(jsonMsg);
+                if ('undefined' !== typeof(jsonMsg)) {
+                    sendResponse(jsonMsg);
+                }
             })
             .fail(function(data, status, error) {
                 sendResponse({ 'success': false });
