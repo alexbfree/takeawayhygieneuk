@@ -43,9 +43,8 @@ chrome.runtime.onMessage.addListener(
                         'results': resultCount
                     };
                 }
-                if ('undefined' !== typeof(jsonMsg)) {
-                    sendResponse(jsonMsg);
-                }
+                
+                sendResponse(jsonMsg);
             })
             .fail(function(data, status, error) {
                 sendResponse({ 'success': false });
