@@ -31,13 +31,24 @@ chrome.runtime.sendMessage({"name": businessName, "address": businessAddress}, f
 </span>
 `;
     } else {
-        ratingContent =
+        // Vary our response based on the number of results.
+        if ( response.results === 0 ) {
+            ratingContent =
 `
 <span class='fsapanel fsanorating'>
     No FSA Hygiene rating found!
 </span>
 `;
+        } else if (response.results > 1) {
+            ratingContent =
+`
+<span class='fsapanel fsanorating'>
+    More than one takeaway returned!
+</span>
+`;
+        }
     }
     
+    // Finally, append it to the page.
     $('div.restaurantOverview > div.details').append(ratingContent);
 });

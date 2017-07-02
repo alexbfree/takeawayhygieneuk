@@ -1,18 +1,18 @@
 chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
-        var apiBase = 'http://api.ratings.food.gov.uk/';
-        var apiUrl;
-        var apiCall;
-        var jsonMsg;
-        
+    function(request, sender, sendResponse) {        
         var businessName = request.name;
         var businessAddress = request.address;
         
+        var apiBase = 'http://api.ratings.food.gov.uk/';
+        
+        // Check we haven't received empty strings...
         if (( businessName === "" && businessAddress === "" ) === false) {
-            apiCall = 'Establishments?name=' + businessName + '&address=' + businessAddress;
-            apiUrl = apiBase + apiCall;
+            // Build our full API URL.
+            var apiCall = 'Establishments?name=' + businessName + '&address=' + businessAddress;
+            var apiUrl = apiBase + apiCall;
             $.ajax({
                 beforeSend: function(request) {
+                    // The FSA API requires you to set this header to work.
                     request.setRequestHeader('x-api-version', 2);
                     console.log(request);
                 },
@@ -20,16 +20,22 @@ chrome.runtime.onMessage.addListener(
                 url: apiUrl
             })
             .done(function(data, status) {
-                if ( Object.keys(data.establishments).length > 0 ) {
+                var jsonMsg;
+                
+                var resultCount = Object.keys(data.establishments).length;
+                // Check we've actually received some results!
+                if ( resultCount === 1 ) {
                     jsonMsg = {
                         'success': true,
                         'rating': data.establishments[0].RatingValue,
                         'key': data.establishments[0].RatingKey,
-                        'date': data.establishments[0].RatingDate
+                        'date': data.establishments[0].RatingDate,
+                        'results': resultCount
                     };
                 } else {
                     jsonMsg = {
-                        'success': false
+                        'success': false,
+                        'results': resultCount
                     };
                 }
                 sendResponse(jsonMsg);
