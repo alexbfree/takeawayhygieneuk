@@ -1,3 +1,11 @@
+// Never trust data you didn't prepare yourself :P
+function escapeHtml(str) {
+    var div = document.createElement('div');
+    div.appendChild(document.createTextNode(str));
+    return div.innerHTML;
+}
+
+// Let's get our search parameters out of the page!
 var businessName = $("div.details > h1.name").text().trim();
 var businessAddress = $("div.details > p.address").text().replace(/\s+/g, ' ').trim();
 
@@ -15,10 +23,10 @@ chrome.runtime.sendMessage({"name": businessName, "address": businessAddress}, f
 `
 <span class='fsapanel'>
     <p class='fsarating'>
-      <img src='` + fsaImgLink + `'>
+      <img src='` + escapeHtml(fsaImgLink) + `'>
     </p>
     <p class='fsadate'>
-      <label class='fsadatelabel'>Rating Date:</label> <span>` + fsaDateStr + `</span>
+      <label class='fsadatelabel'>Rating Date:</label> <span>` + escapeHtml(fsaDateStr) + `</span>
     </p>
 </span>
 `;
