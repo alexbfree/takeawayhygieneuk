@@ -5,11 +5,38 @@ function escapeHtml(str) {
     return div.innerHTML;
 }
 
+var siteLookupTable = {
+    'www.just-eat.co.uk': 'justeat',
+    'hungryhouse.co.uk': 'hungryhouse'
+};
+
+var currentSite = siteLookupTable[location.hostname];
+
+var businessName;
+var businessStreet;
+var businessCity;
+var businessPostcode;
+
 // Let's get our search parameters out of the page!
-var businessName = $('div.details > h1.name').text().trim();
-var businessStreet = $('div.details > p.address > span#street').text().replace(/\s+/g, ' ').trim();
-var businessCity = $('div.details > p.address > span#city').text().replace(/\s+/g, ' ').trim();
-var businessPostcode = $('div.details > p.address > span#postcode').text().replace(/\s+/g, ' ').trim();
+switch (currentSite) {
+    case 'justeat':
+        businessName = $('div.details > h1.name').text().trim();
+        businessStreet = $('div.details > p.address > span#street').text().replace(/\s+/g, ' ').trim();
+        businessCity = $('div.details > p.address > span#city').text().replace(/\s+/g, ' ').trim();
+        businessPostcode = $('div.details > p.address > span#postcode').text().replace(/\s+/g, ' ').trim();
+        break;
+    case 'hungryhouse':
+        businessName = $('.restMainInfoHeader > div.headerLeft > h1 > span:nth-of-type(1)').text().replace(/\s+/g, ' ').trim();
+        businessStreet = $('.menuAddress > .address > span:nth-of-type(1)').text().replace(/\s+/g, ' ').trim();
+        businessCity = $('.menuAddress > .address > span:nth-of-type(2)').text().replace(/\s+/g, ' ').trim();
+        businessPostcode = $('.menuAddress > .address > span:nth-of-type(3)').text().replace(/\s+/g, ' ').trim();
+        
+        if ( businessPostcode === '' ) {
+            businessPostcode = businessCity;
+            businessCity = '';
+        }
+        break;
+}
 
 chrome.runtime.sendMessage({
         'name': businessName,
@@ -28,36 +55,45 @@ chrome.runtime.sendMessage({
         
         ratingContent =
 `
-<span class='fsapanel'>
+<div class='fsapanel'>
     <p class='fsarating'>
       <img src='` + escapeHtml(fsaImgLink) + `'>
     </p>
     <p class='fsadate'>
       <label class='fsadatelabel'>Rating Date:</label> <span>` + escapeHtml(fsaDateStr) + `</span>
     </p>
-</span>
+</div>
 `;
     } else {
         // Vary our response based on the number of results.
         if ( response.results === 0 ) {
             ratingContent =
 `
-<span class='fsapanel fsanorating'>
+<div class='fsapanel fsanorating'>
     <p class="fsaheader">No FSA Hygiene rating found!</p>
     <p>Try searching on <a href="http://ratings.food.gov.uk/">the FSA website!</a></p>
-</span>
+</div>
 `;
         } else if (response.results > 1) {
             ratingContent =
 `
-<span class='fsapanel fsanorating'>
+<div class='fsapanel fsanorating'>
     <p class="fsaheader">FSA returned more than one takeaway!</p>
     <p>Try searching on <a href="http://ratings.food.gov.uk/">the FSA website!</a></p>
-</span>
+</div>
 `;
         }
     }
     
     // Finally, append it to the page.
-    $('div.restaurantOverview > div.details').append(ratingContent);
+    var targetElement;
+    switch (currentSite) {
+        case 'justeat':
+            targetElement = 'div.restaurantOverview > div.details';
+            break;
+        case 'hungryhouse':
+            targetElement = 'div#restMainInfoWrapper';
+            break;
+    }
+    $(targetElement).append(ratingContent);
 });

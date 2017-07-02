@@ -1,5 +1,4 @@
-span.fsapanel {
-    display: block;
+div.fsapanel {
     margin: 5px;
 }
 
@@ -7,8 +6,8 @@ label.fsadatelabel {
 	font-weight: bold;
 }
 
-span.fsanorating {
-    font-size: 12px;
+div.fsanorating {
+    font-size: 11px;
 }
 
 .fsaheader {

@@ -20,7 +20,20 @@
 	  "fsainsert.js"
     ],
     "css": [
-      "style.css"
+      "style-justeat.css"
+    ],
+    "run_at": "document_end"
+  },
+  {
+    "matches": [
+      "https://hungryhouse.co.uk/*"
+	],
+	"js": [
+	  "jquery-3.2.1.min.js",
+	  "fsainsert.js"
+    ],
+    "css": [
+        "style-hungryhouse.css"
     ],
     "run_at": "document_end"
   }],

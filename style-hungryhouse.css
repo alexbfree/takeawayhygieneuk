@@ -1,0 +1,37 @@
+div.fsapanel {
+    font-size: 11px;
+    bottom: 20px;
+    left: 10px;
+    line-height: 1em;
+    max-width: 200px;
+    vertical-align: middle;
+    
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+}
+
+div.fsapanel > p {
+    margin: 8px;
+    text-align: center;
+}
+
+label.fsadatelabel {
+	font-weight: bold;
+}
+
+div.fsanorating {
+    font-size: 11px;
+    
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.fsaheader {
+    font-weight: bold;
+}
+
+div#restMainInfoWrapper > div {
+    max-width: 25%;
+}
