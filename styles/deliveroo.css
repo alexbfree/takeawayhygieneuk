@@ -1,0 +1,12 @@
+div.fsapanel {
+    margin: 5px;
+    font-size: 12px;
+}
+
+label.fsadatelabel {
+	font-weight: bold;
+}
+
+.fsaheader {
+    font-weight: bold;
+}

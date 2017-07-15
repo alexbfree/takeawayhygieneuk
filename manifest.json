@@ -36,6 +36,19 @@
         "/styles/hungryhouse.css"
     ],
     "run_at": "document_end"
+  },
+  {
+    "matches": [
+      "https://deliveroo.co.uk/*"
+	],
+	"js": [
+	  "jquery-3.2.1.min.js",
+	  "fsainsert.js"
+    ],
+    "css": [
+        "/styles/deliveroo.css"
+    ],
+    "run_at": "document_end"
   }],
   "background": {
     "persistent": false,
