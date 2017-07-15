@@ -81,7 +81,7 @@ chrome.runtime.sendMessage({
 `
 <div class='fsapanel fsanorating'>
     <p class="fsaheader">No FSA Hygiene rating found!</p>
-    <p>Try searching on <a href="http://ratings.food.gov.uk/">the FSA website!</a></p>
+    <p>Try searching on <a href="http://ratings.food.gov.uk/" target="_blank">the FSA website!</a></p>
 </div>
 `;
         } else if (response.results > 1) {
@@ -89,7 +89,7 @@ chrome.runtime.sendMessage({
 `
 <div class='fsapanel fsanorating'>
     <p class="fsaheader">FSA returned more than one takeaway!</p>
-    <p>Try searching on <a href="http://ratings.food.gov.uk/">the FSA website!</a></p>
+    <p>Try searching on <a href="http://ratings.food.gov.uk/" target="_blank">the FSA website!</a></p>
 </div>
 `;
         }
