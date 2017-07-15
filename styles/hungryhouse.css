@@ -32,6 +32,14 @@ div.fsanorating {
     font-weight: bold;
 }
 
+div.restBoxContent {
+    margin-bottom: 50px;
+}
+
+div#restMainInfoWrapper {
+    min-height: 60px;
+}
+
 div#restMainInfoWrapper > div {
     max-width: 25%;
 }
