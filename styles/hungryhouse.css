@@ -1,19 +1,20 @@
 div.fsapanel {
     font-size: 11px;
-    bottom: 20px;
-    left: 10px;
     line-height: 1em;
-    max-width: 200px;
+    width: 120px;
     vertical-align: middle;
-    
     -webkit-transform-style: preserve-3d;
     -moz-transform-style: preserve-3d;
     transform-style: preserve-3d;
+    top: -20px;
+    right: -50px;
+    margin-left: 0px !important;
 }
 
 div.fsapanel > p {
     margin: 8px;
     text-align: center;
+    width: 100%;
 }
 
 label.fsadatelabel {
@@ -21,11 +22,7 @@ label.fsadatelabel {
 }
 
 div.fsanorating {
-    font-size: 11px;
-    
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
+    right: -20px;
 }
 
 .fsaheader {
@@ -40,6 +37,6 @@ div#restMainInfoWrapper {
     min-height: 60px;
 }
 
-div#restMainInfoWrapper > div {
+div#restMainInfoWrapper > div:not(.fsapanel) {
     max-width: 25%;
 }
