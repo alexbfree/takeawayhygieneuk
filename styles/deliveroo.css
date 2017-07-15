@@ -1,6 +1,11 @@
 div.fsapanel {
     margin: 5px;
     font-size: 12px;
+    text-align: center;
+}
+
+p.fsadate {
+    white-space: nowrap;
 }
 
 label.fsadatelabel {
