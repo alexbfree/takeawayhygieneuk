@@ -102,17 +102,22 @@ chrome.runtime.sendMessage({
         }
     }
     
-    // Finally, append it to the page.
+    // Finally, add it to the page.
     var targetElement;
+    var targetOp;
+    
     switch (currentSite) {
         case 'justeat':
             targetElement = 'div.restaurantOverview > div.details';
+            targetOp = 'append';
             break;
         case 'hungryhouse':
             targetElement = 'div#restMainInfoWrapper';
+            targetOp = 'append';
             break;
         case 'deliveroo':
             targetElement = 'div.restaurant__details > div.restaurant__metadata';
+            targetOp = 'append';
             break;
         case 'kukd':
             if (window.location.pathname.match(/\/menu$/)) {
@@ -120,7 +125,16 @@ chrome.runtime.sendMessage({
             } else if (window.location.pathname.match(/\/(info|reviews)$/)) {
                 targetElement = 'div.mb40 > div.mt20 > div:first-of-type';
             }
+            targetOp = 'after';
             break;
     }
-    $(targetElement).append(ratingContent);
+    
+    switch (targetOp) {
+        case 'append':
+            $(targetElement).append(ratingContent);
+            break;
+        case 'after':
+            $(targetElement).after(ratingContent);
+            break;
+    }
 });
