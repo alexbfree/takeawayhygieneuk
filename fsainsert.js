@@ -40,7 +40,6 @@ switch (currentSite) {
     case 'deliveroo':
         businessName = $('div.restaurant--main > div.restaurant__details > h1.restaurant__name').text().replace(/^(.+)-.+/, "$1").trim();
         businessAddress = $('div.restaurant--main > div.restaurant__details > div.restaurant__metadata > div.metadata__details > small.address').text().split(',');
-        console.log(businessName);
         businessStreet = businessAddress[0].trim();
         businessCity = businessAddress[businessAddress.length-2].trim();
         businessPostcode = businessAddress[businessAddress.length-1].trim();
