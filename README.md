@@ -4,11 +4,12 @@ A simple browser extension for Google Chrome that looks up UK Food Standards Age
 Published extension is available for download on the [Chrome Web Store](https://chrome.google.com/webstore/detail/takeaway-hygiene-ratings/bkmnhmkibfcgcddfkgmgnecchilhbgmi).
 
 Currently this supports:
-* Just Eat
-* Hungryhouse
-* Deliveroo
+* Just Eat (just-eat.co.uk)
+* Hungryhouse (hungryhouse.co.uk)
+* Deliveroo (deliveroo.co.uk)
+* Kukd (kukd.com)
 
-Scrapes the menu pages of these sites for the name and address of the establishment, and makes a call to the Food Standards Agency API (documentation available here: http://api.ratings.food.gov.uk/help) with the establishment name and postcode for the latest rating for the establishment, before inserting a graphic and date for the rating into the page.
+Scrapes the restaurant pages of these sites for the name and address of the establishment, and makes a call to the Food Standards Agency API (documentation available here: http://api.ratings.food.gov.uk/help) with the establishment name and postcode for the latest rating for the establishment, before inserting a graphic and date for the rating into the page.
 
 ## Contributing
 
