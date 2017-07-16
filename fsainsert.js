@@ -43,7 +43,7 @@ switch (currentSite) {
         businessStreet = businessAddress[0].trim();
         businessCity = businessAddress[businessAddress.length-2].trim();
         businessPostcode = businessAddress[businessAddress.length-1].trim();
-        businessPostcode = businessPostcode.replace(/^(.{3,4})(.{3})$/, "$1 $2");
+        businessPostcode = businessPostcode.replace(/^(.{2,4})(.{3})$/, "$1 $2");
         break;
 }
 
