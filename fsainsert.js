@@ -8,7 +8,8 @@ function escapeHtml(str) {
 var siteLookupTable = {
     'www.just-eat.co.uk': 'justeat',
     'hungryhouse.co.uk': 'hungryhouse',
-    'deliveroo.co.uk': 'deliveroo'
+    'deliveroo.co.uk': 'deliveroo',
+    'www.kukd.com': 'kukd'
 };
 
 var currentSite = siteLookupTable[location.hostname];
@@ -44,6 +45,13 @@ switch (currentSite) {
         businessCity = businessAddress[businessAddress.length-2].trim();
         businessPostcode = businessAddress[businessAddress.length-1].trim();
         businessPostcode = businessPostcode.replace(/^(.{2,4})(.{3})$/, "$1 $2");
+        break;
+    case 'kukd':
+        businessName = $('section.headermaink > div.container:nth-of-type(1) > h1 > b').text().trim();
+        businessAddress = $('section.headermaink > div.container:nth-of-type(1) > h2').text().split(',');
+        businessStreet = businessAddress[0].trim();
+        businessCity = businessAddress[businessAddress.length-2].trim();
+        businessPostcode = businessAddress[businessAddress.length-1].trim();
         break;
 }
 
@@ -105,6 +113,13 @@ chrome.runtime.sendMessage({
             break;
         case 'deliveroo':
             targetElement = 'div.restaurant__details > div.restaurant__metadata';
+            break;
+        case 'kukd':
+            if (window.location.pathname.match(/\/menu$/)) {
+                targetElement = 'div#checkoutHide > div.ordermodes:nth-of-type(3)';
+            } else if (window.location.pathname.match(/\/(info|reviews)$/)) {
+                targetElement = 'div.mb40 > div.mt20 > div:first-of-type';
+            }
             break;
     }
     $(targetElement).append(ratingContent);

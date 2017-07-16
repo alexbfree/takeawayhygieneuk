@@ -1,0 +1,30 @@
+div.fsapanel {
+    margin: 5px;
+    font-size: 12px;
+    text-align: center;
+    width: 170px;
+    position: relative;
+    left: 35px;
+    margin-top: 15px;
+}
+
+p.fsadate {
+    white-space: nowrap;
+}
+
+label.fsadatelabel {
+	font-weight: bold;
+}
+
+.fsaheader {
+    font-weight: bold;
+}
+
+div.fsanorating {
+    border-color: black;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 10px;
+    background-color: yellowgreen;
+    color: black;
+}

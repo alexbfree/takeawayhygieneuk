@@ -50,6 +50,19 @@
         "/styles/deliveroo.css"
     ],
     "run_at": "document_end"
+  },
+  {
+    "matches": [
+      "https://www.kukd.com/restaurant/*"
+	],
+	"js": [
+	  "jquery-3.2.1.min.js",
+	  "fsainsert.js"
+    ],
+    "css": [
+        "/styles/kukd.css"
+    ],
+    "run_at": "document_end"
   }],
   "background": {
     "persistent": false,
