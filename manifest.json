@@ -9,69 +9,67 @@
     "32": "/icons/icon_32.png",
     "64": "/icons/icon_64.png",
     "128": "/icons/icon_128.png",
-	"256": "/icons/icon_256.png"
+    "256": "/icons/icon_256.png"
   },
   "content_scripts": [{
-	"matches": [
-	  "https://www.just-eat.co.uk/restaurants-*/menu",
-	  "https://www.just-eat.co.uk/restaurants-*/menu#*",
-      "https://www.just-eat.co.uk/restaurants-*/reviews",
-      "https://www.just-eat.co.uk/restaurants-*"
-	],
-	"js": [
-	  "jquery-3.2.1.min.js",
-	  "fsainsert.js"
-    ],
-    "css": [
-      "/styles/justeat.css"
-    ],
-    "run_at": "document_end"
-  },
-  {
-    "matches": [
-      "https://hungryhouse.co.uk/*"
-	],
-	"js": [
-	  "jquery-3.2.1.min.js",
-	  "fsainsert.js"
-    ],
-    "css": [
+      "matches": [
+        "https://www.just-eat.co.uk/restaurants-*/menu",
+        "https://www.just-eat.co.uk/restaurants-*/menu#*",
+        "https://www.just-eat.co.uk/restaurants-*/reviews",
+        "https://www.just-eat.co.uk/restaurants-*"
+      ],
+      "js": [
+        "jquery-3.2.1.min.js",
+        "fsainsert.js"
+      ],
+      "css": [
+        "/styles/justeat.css"
+      ],
+      "run_at": "document_end"
+    }, {
+      "matches": [
+        "https://hungryhouse.co.uk/*"
+      ],
+      "js": [
+        "jquery-3.2.1.min.js",
+        "fsainsert.js"
+      ],
+      "css": [
         "/styles/hungryhouse.css"
-    ],
-    "run_at": "document_end"
-  },
-  {
-    "matches": [
-      "https://deliveroo.co.uk/*"
-	],
-	"js": [
-	  "jquery-3.2.1.min.js",
-	  "fsainsert.js"
-    ],
-    "css": [
+      ],
+      "run_at": "document_end"
+    }, {
+      "matches": [
+        "https://deliveroo.co.uk/*"
+      ],
+      "js": [
+        "jquery-3.2.1.min.js",
+        "fsainsert.js"
+      ],
+      "css": [
         "/styles/deliveroo.css"
-    ],
-    "run_at": "document_end"
-  },
-  {
-    "matches": [
-      "https://www.kukd.com/restaurant/*"
-	],
-	"js": [
-	  "jquery-3.2.1.min.js",
-	  "fsainsert.js"
-    ],
-    "css": [
+      ],
+      "run_at": "document_end"
+    }, {
+      "matches": [
+        "https://www.kukd.com/restaurant/*"
+      ],
+      "js": [
+        "jquery-3.2.1.min.js",
+        "fsainsert.js"
+      ],
+      "css": [
         "/styles/kukd.css"
-    ],
-    "run_at": "document_end"
-  }],
+      ],
+      "run_at": "document_end"
+    }
+  ],
   "background": {
     "persistent": false,
     "scripts": [
-	  "fsabg.js",
-	  "jquery-3.2.1.min.js"
-	]
+      "fsabg.js",
+      "jquery-3.2.1.min.js"
+    ]
   },
   "permissions": [
     "http://ratings.food.gov.uk/*"
