@@ -8,7 +8,8 @@ function escapeHtml(str) {
 var siteLookupTable = {
     'www.just-eat.co.uk': 'justeat',
     'hungryhouse.co.uk': 'hungryhouse',
-    'deliveroo.co.uk': 'deliveroo'
+    'deliveroo.co.uk': 'deliveroo',
+    'www.kukd.com': 'kukd'
 };
 
 var currentSite = siteLookupTable[location.hostname];
@@ -27,7 +28,12 @@ switch (currentSite) {
         businessPostcode = $('div.details > p.address > span#postcode').text().replace(/\s+/g, ' ').trim();
         break;
     case 'hungryhouse':
-        businessName = $('.restMainInfoHeader > div.headerLeft > h1 > span:nth-of-type(1)').text().replace(/\s+/g, ' ').trim();
+        // Because of course they change the header element for the reviews page.
+        if (window.location.pathname.match(/\/reviews$/)) {
+            businessName = $('.restMainInfoHeader > div.headerLeft > div.reviewPageRestTitle > span:nth-of-type(1)').text().replace(/\s+/g, ' ').trim();
+        } else {
+            businessName = $('.restMainInfoHeader > div.headerLeft > h1 > span:nth-of-type(1)').text().replace(/\s+/g, ' ').trim();
+        }
         businessStreet = $('.menuAddress > .address > span:nth-of-type(1)').text().replace(/\s+/g, ' ').trim();
         businessCity = $('.menuAddress > .address > span:nth-of-type(2)').text().replace(/\s+/g, ' ').trim();
         businessPostcode = $('.menuAddress > .address > span:nth-of-type(3)').text().replace(/\s+/g, ' ').trim();
@@ -40,11 +46,17 @@ switch (currentSite) {
     case 'deliveroo':
         businessName = $('div.restaurant--main > div.restaurant__details > h1.restaurant__name').text().replace(/^(.+)-.+/, "$1").trim();
         businessAddress = $('div.restaurant--main > div.restaurant__details > div.restaurant__metadata > div.metadata__details > small.address').text().split(',');
-        console.log(businessName);
         businessStreet = businessAddress[0].trim();
         businessCity = businessAddress[businessAddress.length-2].trim();
         businessPostcode = businessAddress[businessAddress.length-1].trim();
-        businessPostcode = businessPostcode.replace(/^(.{3,4})(.{3})$/, "$1 $2");
+        businessPostcode = businessPostcode.replace(/^(.{2,4})(.{3})$/, "$1 $2");
+        break;
+    case 'kukd':
+        businessName = $('section.headermaink > div.container:nth-of-type(1) > h1 > b').text().trim();
+        businessAddress = $('section.headermaink > div.container:nth-of-type(1) > h2').text().split(',');
+        businessStreet = businessAddress[0].trim();
+        businessCity = businessAddress[businessAddress.length-2].trim();
+        businessPostcode = businessAddress[businessAddress.length-1].trim();
         break;
 }
 
@@ -95,18 +107,39 @@ chrome.runtime.sendMessage({
         }
     }
     
-    // Finally, append it to the page.
+    // Finally, add it to the page.
     var targetElement;
+    var targetOp;
+    
     switch (currentSite) {
         case 'justeat':
             targetElement = 'div.restaurantOverview > div.details';
+            targetOp = 'append';
             break;
         case 'hungryhouse':
             targetElement = 'div#restMainInfoWrapper';
+            targetOp = 'append';
             break;
         case 'deliveroo':
             targetElement = 'div.restaurant__details > div.restaurant__metadata';
+            targetOp = 'append';
+            break;
+        case 'kukd':
+            if (window.location.pathname.match(/\/menu$/)) {
+                targetElement = 'div#checkoutHide > div.ordermodes:nth-of-type(3)';
+            } else if (window.location.pathname.match(/\/(info|reviews)$/)) {
+                targetElement = 'div.mb40 > div.mt20 > div:first-of-type';
+            }
+            targetOp = 'after';
             break;
     }
-    $(targetElement).append(ratingContent);
+    
+    switch (targetOp) {
+        case 'append':
+            $(targetElement).append(ratingContent);
+            break;
+        case 'after':
+            $(targetElement).after(ratingContent);
+            break;
+    }
 });
