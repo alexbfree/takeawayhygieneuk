@@ -28,7 +28,12 @@ switch (currentSite) {
         businessPostcode = $('div.details > p.address > span#postcode').text().replace(/\s+/g, ' ').trim();
         break;
     case 'hungryhouse':
-        businessName = $('.restMainInfoHeader > div.headerLeft > h1 > span:nth-of-type(1)').text().replace(/\s+/g, ' ').trim();
+        // Because of course they change the header element for the reviews page.
+        if (window.location.pathname.match(/\/reviews$/)) {
+            businessName = $('.restMainInfoHeader > div.headerLeft > div.reviewPageRestTitle > span:nth-of-type(1)').text().replace(/\s+/g, ' ').trim();
+        } else {
+            businessName = $('.restMainInfoHeader > div.headerLeft > h1 > span:nth-of-type(1)').text().replace(/\s+/g, ' ').trim();
+        }
         businessStreet = $('.menuAddress > .address > span:nth-of-type(1)').text().replace(/\s+/g, ' ').trim();
         businessCity = $('.menuAddress > .address > span:nth-of-type(2)').text().replace(/\s+/g, ' ').trim();
         businessPostcode = $('.menuAddress > .address > span:nth-of-type(3)').text().replace(/\s+/g, ' ').trim();
