@@ -35,11 +35,6 @@ chrome.runtime.onMessage.addListener(
                         'date': data.establishments[0].RatingDate,
                         'results': resultCount
                     };
-                } else if (resultCount === 0 ) {
-                    jsonMsg = {
-                        'success': false,
-                        'results': resultCount
-                    };
                 } else {
                     jsonMsg = {
                         'success': false,
