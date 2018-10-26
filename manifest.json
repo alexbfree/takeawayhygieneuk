@@ -11,7 +11,8 @@
     "128": "/icons/icon_128.png",
     "256": "/icons/icon_256.png"
   },
-  "content_scripts": [{
+  "content_scripts": [
+    {
       "matches": [
         "https://www.just-eat.co.uk/restaurants-*/menu",
         "https://www.just-eat.co.uk/restaurants-*/menu#*",
@@ -27,17 +28,18 @@
       ],
       "run_at": "document_end"
     },
-    "matches": [
-    "https://www.just-eat.co.uk/area/*"
-    ],
-    "js": [
-    "jquery-3.2.1.min.js",
-    "fsarank.js"
-    ],
-    "css": [
-    "/styles/justeat.css"
-    ],
-    "run_at": "document_end"
+    {
+      "matches": [
+        "https://www.just-eat.co.uk/area/*"
+      ],
+      "js": [
+        "jquery-3.2.1.min.js",
+        "fsarank.js"
+      ],
+      "css": [
+        "/styles/justeat.css"
+      ],
+      "run_at": "document_end"
     },
     {
       "matches": [
@@ -51,7 +53,8 @@
         "/styles/hungryhouse.css"
       ],
       "run_at": "document_end"
-    }, {
+    },
+    {
       "matches": [
         "https://deliveroo.co.uk/*"
       ],
@@ -63,7 +66,8 @@
         "/styles/deliveroo.css"
       ],
       "run_at": "document_end"
-    }, {
+    },
+    {
       "matches": [
         "https://www.kukd.com/restaurant/*"
       ],
