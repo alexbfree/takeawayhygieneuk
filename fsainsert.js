@@ -76,6 +76,9 @@ chrome.runtime.sendMessage({
         var fsaDateStr = fsaDate.getDate() + '/' + (fsaDate.getMonth() + 1) + '/' + fsaDate.getFullYear();
 
         var ratingsLookup = window.localStorage.getItem('ratingsLookup');
+        if (ratingsLookup==null) {
+            ratingsLookup = {};
+        }
         ratingsLookup[businessName] = {
            key: fsaKey,
            imageUrl: fsaImgLink,
