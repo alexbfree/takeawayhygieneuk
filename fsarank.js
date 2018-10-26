@@ -14,10 +14,10 @@ var businessName;
 
 switch (currentSite) {
     case 'justeat': {
-        businessName = $('div.details > h1.name').text().trim();
+        //businessName = $('div.details > h1.name').text().trim();
 
         var ratingsLookup = window.localStorage.getItem('ratingsLookup');
-        console.log(ratingsLookup[businessName]);
+        console.log(ratingsLookup);
         break;
     }
 };

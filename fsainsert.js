@@ -78,6 +78,8 @@ chrome.runtime.sendMessage({
         var ratingsLookup = window.localStorage.getItem('ratingsLookup');
         if (ratingsLookup==null) {
             ratingsLookup = {};
+        } else {
+            ratingsLookup = JSON.parse(ratingsLookup);
         }
         ratingsLookup[businessName] = {
            key: fsaKey,
@@ -85,7 +87,7 @@ chrome.runtime.sendMessage({
            date: fsaDate,
            rating: fsaRating
         };
-        window.localStorage.setItem('ratingsLookup',ratingsLookup);
+        window.localStorage.setItem('ratingsLookup',JSON.stringify(ratingsLookup));
 
         ratingContent =
 `
