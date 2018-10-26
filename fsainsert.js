@@ -74,7 +74,16 @@ chrome.runtime.sendMessage({
         var fsaImgLink = chrome.extension.getURL('/images/ratings/' + fsaKey + '.jpg');
         
         var fsaDateStr = fsaDate.getDate() + '/' + (fsaDate.getMonth() + 1) + '/' + fsaDate.getFullYear();
-        
+
+        var ratingsLookup = window.localStorage.getItem('ratingsLookup');
+        ratingsLookup[businessName] = {
+           key: fsaKey,
+           imageUrl: fsaImgLink,
+           date: fsaDate,
+           rating: fsaRating
+        };
+        window.localStorage.setItem('ratingsLookup',ratingsLookup);
+
         ratingContent =
 `
 <div class='fsapanel'>
