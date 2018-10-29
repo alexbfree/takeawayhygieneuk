@@ -76,10 +76,10 @@ chrome.runtime.sendMessage({
         var fsaDateStr = fsaDate.getDate() + '/' + (fsaDate.getMonth() + 1) + '/' + fsaDate.getFullYear();
 
         var ratingsLookup = window.localStorage.getItem('ratingsLookup');
-        if (ratingsLookup==null) {
+        if (ratingsLookup == '""' || ratingsLookup==null) {
             ratingsLookup = {};
         } else {
-            ratingsLookup = JSON.parse(ratingsLookup);
+           ratingsLookup = JSON.parse(ratingsLookup);
         }
         ratingsLookup[businessName] = {
            key: fsaKey,
@@ -87,6 +87,8 @@ chrome.runtime.sendMessage({
            date: fsaDate,
            rating: fsaRating
         };
+        console.log('updated:');
+        console.dir(ratingsLookup);
         window.localStorage.setItem('ratingsLookup',JSON.stringify(ratingsLookup));
 
         ratingContent =

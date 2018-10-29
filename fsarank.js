@@ -16,7 +16,8 @@ switch (currentSite) {
     case 'justeat': {
         //businessName = $('div.details > h1.name').text().trim();
 
-        var ratingsLookup = window.localStorage.getItem('ratingsLookup');
+        var ratingsLookup = JSON.parse(window.localStorage.getItem('ratingsLookup'));
+        console.log('looked up:')
         console.log(ratingsLookup);
         break;
     }
