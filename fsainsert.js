@@ -61,19 +61,19 @@ switch (currentSite) {
 }
 
 chrome.runtime.sendMessage({
-        'name': businessName,
-        'street': businessStreet,
-        'city': businessCity,
-        'postcode': businessPostcode
-    }, function(response) {
-    var ratingContent;
-    if ( response.success === true ) {
-        var fsaRating = response.rating;
-        var fsaKey = response.key;
-        var fsaDate = new Date(response.date);
-        var fsaImgLink = chrome.extension.getURL('/images/ratings/' + fsaKey + '.jpg');
-        
-        var fsaDateStr = fsaDate.getDate() + '/' + (fsaDate.getMonth() + 1) + '/' + fsaDate.getFullYear();
+            'name': businessName,
+            'street': businessStreet,
+            'city': businessCity,
+            'postcode': businessPostcode
+        }, function(response) {
+            var ratingContent;
+            if ( response.success === true ) {
+                var fsaRating = response.rating;
+                var fsaKey = response.key;
+                var fsaDate = new Date(response.date);
+                var fsaImgLink = chrome.extension.getURL('/images/ratings/' + fsaKey + '.jpg');
+
+                var fsaDateStr = fsaDate.getDate() + '/' + (fsaDate.getMonth() + 1) + '/' + fsaDate.getFullYear();
 
         var ratingsLookup = window.localStorage.getItem('ratingsLookup');
         if (ratingsLookup == '""' || ratingsLookup==null) {
