@@ -29,8 +29,23 @@ var updateElementWithScore = function (element,urlStub) {
             </p>
         </div>
     `;
-    //console.log(ratingContent);
-    //console.log('updating element ', urlStub, fsaKey);
+    var container = element.querySelector('div.o-tile__details');
+    var elDiv = element.querySelector('div.fsapanel');
+    if (elDiv) {
+        container.removeChild(elDiv);
+    }
+    container.insertAdjacentHTML('afterbegin',ratingContent);
+};
+
+var updateElementNoScore = function (element) {
+    var fsaImgLink = chrome.extension.getURL('/images/ratings/fhrs_awaitinginspection_en-gb.jpg');
+    var ratingContent = `
+        <div class='fsapanel' alt="No inspection information available." style="float: right;margin: 0;padding: 0 10px;">
+            <p class='fsarating' style="height: 61px;">
+              <img src='` + escapeHtml(fsaImgLink) + `'>
+            </p>
+        </div>
+    `;
     var container = element.querySelector('div.o-tile__details');
     var elDiv = element.querySelector('div.fsapanel');
     if (elDiv) {
@@ -58,10 +73,8 @@ switch (currentSite) {
               '</p></div>');
 
             if (ratingsLookup[urlStub]) {
-              //console.log('found previous match for ',urlStub,' updating');
               updateElementWithScore(v,urlStub);
             } else {
-                //console.log('found no match for ',urlStub,' searching');
                 chrome.runtime.sendMessage({
                     'name': businessName,
                     'street': street,
@@ -69,7 +82,6 @@ switch (currentSite) {
                     'postcode': postcode
                 }, function (response) {
                     if (response.success === true) {
-                        //console.log('found a match for ',urlStub,' storing');
                         var fsaRating = response.rating;
                         var fsaKey = response.key;
                         var fsaDate = new Date(response.date);
@@ -83,13 +95,11 @@ switch (currentSite) {
                             rating: fsaRating
                         };
                         window.localStorage.setItem('ratingsLookup', JSON.stringify(ratingsLookup));
-                        //console.log('found a match for ',urlStub,' updating');
                         updateElementWithScore(v,urlStub);
 
                     } else {
-                        //console.log('failed to find match for ',urlStub,' wiping');
-                        // error - just wipe spinner and give up
-                        v.removeChild(v.querySelector('div.fsapanel'));
+                        // nothing found
+                        updateElementNoScore(v);
                     }
                 });
             }
