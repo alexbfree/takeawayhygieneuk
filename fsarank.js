@@ -9,6 +9,8 @@ var siteLookupTable = {
     'www.just-eat.co.uk': 'justeat'
 };
 
+var restaurantsToCheck = null;
+
 var currentSite = siteLookupTable[location.hostname];
 var ratingsLookup = window.localStorage.getItem('ratingsLookup');
 if (ratingsLookup == '""' || ratingsLookup == null) {
@@ -18,10 +20,11 @@ if (ratingsLookup == '""' || ratingsLookup == null) {
 }
 
 var updateElementWithScore = function (element,urlStub) {
-    console.dir(ratingsLookup[urlStub]);
+    //console.dir(ratingsLookup[urlStub]);
 
     var fsaImgLink = ratingsLookup[urlStub]['imageUrl'];
     var fsaDateStr = ratingsLookup[urlStub]['date'];
+    var fsaRating = ratingsLookup[urlStub]['rating'];
     var ratingContent = `
         <div class='fsapanel' alt="Rating Date ${escapeHtml(fsaDateStr)}" style="float: right;margin: 0;padding: 0 10px;">
             <p class='fsarating' style="height: 61px;">
@@ -34,6 +37,7 @@ var updateElementWithScore = function (element,urlStub) {
     if (elDiv) {
         container.removeChild(elDiv);
     }
+    element.parentElement.dataset.fsarank=fsaRating;
     container.insertAdjacentHTML('afterbegin',ratingContent);
 };
 
@@ -51,12 +55,15 @@ var updateElementNoScore = function (element) {
     if (elDiv) {
         container.removeChild(elDiv);
     }
+    element.parentElement.dataset.fsarank=-2;
     container.insertAdjacentHTML('afterbegin',ratingContent);
 };
 
 switch (currentSite) {
     case 'justeat': {
-        [].forEach.call(document.querySelectorAll('div.c-restaurant a'), function(v,i,a) {
+        var restaurants = document.querySelectorAll('div.c-restaurant a');
+        var count = restaurants.length;
+        [].forEach.call(restaurants, function(v,i,a) {
             var urlStub      = v.href.split('/')[3].trim();
             var address      = v.querySelector('p.c-restaurant__address').innerText;
             var addressParts = address.split(',');
@@ -82,12 +89,16 @@ switch (currentSite) {
                     'postcode': postcode
                 }, function (response) {
                     if (response.success === true) {
-                        var fsaRating = response.rating;
+                        //console.dir(response);
+                        var fsaRating = parseInt(response.rating);
                         var fsaKey = response.key;
                         var fsaDate = new Date(response.date);
                         var fsaImgLink = chrome.extension.getURL('/images/ratings/' + fsaKey + '.jpg');
                         var fsaDateStr = fsaDate.getDate() + '/' + (fsaDate.getMonth() + 1) + '/' + fsaDate.getFullYear();
 
+                        if (!fsaRating) {
+                            fsaRating=-1;
+                        }
                         ratingsLookup[urlStub] = {
                             key: fsaKey,
                             imageUrl: fsaImgLink,
@@ -104,5 +115,13 @@ switch (currentSite) {
                 });
             }
         });
+        // TODO wait until everything complete
+        document.querySelector('div.c-serp-filter__list[data-ft=sortByFilter] ul').insertAdjacentHTML('afterbegin','<li class="fsaranksort"><a href="#"><span class="o-radio"></span>Hygiene Rating</a></li>');
+        document.querySelector('li.fsaranksort').onclick=function(e) {
+            document.querySelector('li.is-selected').removeAttribute('data-ft');
+            document.querySelector('li.is-selected').classList.remove('is-selected');
+            // TODO need to manually put back the A link for the now no longer selected sort
+            e.target.parentElement.classList.add('is-selected');
+        }
     }
 };
