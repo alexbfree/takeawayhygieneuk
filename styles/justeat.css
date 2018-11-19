@@ -22,3 +22,7 @@ div.fsanorating {
     background-color: rgb(213, 226, 86);
     color: black;
 }
+
+p.fsarating {
+    margin-top: 0px;
+}

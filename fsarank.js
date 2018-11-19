@@ -34,7 +34,7 @@ var updateElementWithScore = function (element,stub) {
     var fsaRating = ratingsLookup[stub]['rating'];
     var ratingContent = `
         <div class='fsapanel' alt="Rating Date ${escapeHtml(fsaDateStr)}" style="float: right;margin-right: 20px;vertical-align: top;">
-            <p class='fsarating' style="height: 31px;">
+            <p class='fsarating' style="height: 31px;margin-top:0px;">
               <img src='` + escapeHtml(fsaImgLink) + `'>
             </p>
         </div>
@@ -45,7 +45,6 @@ var updateElementWithScore = function (element,stub) {
         container.removeChild(elDiv);
     }
     element.parentElement.dataset.fsarank=fsaRating;
-    shiftLegendIcons();
     container.insertAdjacentHTML('afterbegin',ratingContent);
 };
 
@@ -53,7 +52,7 @@ var updateElementNoScore = function (element) {
     var fsaImgLink = chrome.extension.getURL('/images/ratings/fhrs_nodataavailable_en-gb.jpg');
     var ratingContent = `
         <div class='fsapanel' alt="No inspection information available." style="float: right;margin-right: 20px;vertical-align: top;">
-            <p class='fsarating' style="height: 31px;">
+            <p class='fsarating' style="height: 31px;margin-top:0px;">
               <img src='` + escapeHtml(fsaImgLink) + `'>
             </p>
         </div>
@@ -64,7 +63,6 @@ var updateElementNoScore = function (element) {
         container.removeChild(elDiv);
     }
     element.parentElement.dataset.fsarank=-2;
-    shiftLegendIcons();
     container.insertAdjacentHTML('afterbegin',ratingContent);
 };
 
@@ -78,16 +76,17 @@ switch (currentSite) {
         var count = restaurants.length;
         [].forEach.call(restaurants, function(v,i,a) {
             var name = v.querySelector('h3.c-listing-item-title').innerText;
+            shiftLegendIcons();
+            var container = v.querySelector('div.c-listing-item-info');
+            container.insertAdjacentHTML('afterbegin', '<div class="fsapanel" alt="Loading FSA Hygiene Rating" ' +
+              'style="float: right;margin-right: 20px;vertical-align: top;">' +
+              '<p class="fsarating" style="height: 31px;margin-top:0px;">' +
+              '<img src="https://previews.dropbox.com/p/orig/AANBEYhHB7n30rFgI8XNtuWj2KTPdiewvIaxjC18BP1g9dX9WmQM8qenHEn57IggeV3WEdZ-WX8otUs8SuALVtHt_3FslvqvSVZDg_r7uaf-wvtd4036las24ryc5a3XZnORTz-lrRhU9pq9R9ycjQgstvA5FCp_ZQCY7uXZSQ_E_UkZccBHt0L5a9sP2oH7j08zMVESO6ehxz19TUvo8Rrc/p.gif?size=2048x1536&size_mode=3">' +
+              '</p></div>');
+
             var worker = new Worker(chrome.runtime.getURL('fsagetaddress.js'));
 
             worker.addEventListener('message', function(e) {
-
-               var container = v.querySelector('div.c-listing-item-info');
-                container.insertAdjacentHTML('afterbegin', '<div class="fsapanel" alt="Loading FSA Hygiene Rating" ' +
-                  'style="float: right;margin-right: 20px;vertical-align: top;">' +
-                  '<p class="fsarating" style="height: 31px;">' +
-                  '<img src="https://previews.dropbox.com/p/orig/AANBEYhHB7n30rFgI8XNtuWj2KTPdiewvIaxjC18BP1g9dX9WmQM8qenHEn57IggeV3WEdZ-WX8otUs8SuALVtHt_3FslvqvSVZDg_r7uaf-wvtd4036las24ryc5a3XZnORTz-lrRhU9pq9R9ycjQgstvA5FCp_ZQCY7uXZSQ_E_UkZccBHt0L5a9sP2oH7j08zMVESO6ehxz19TUvo8Rrc/p.gif?size=2048x1536&size_mode=3">' +
-                  '</p></div>');
 
                 if (ratingsLookup[e.data.stub]) {
                     updateElementWithScore(v,e.data.stub);
