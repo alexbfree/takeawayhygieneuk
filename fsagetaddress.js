@@ -14,7 +14,9 @@ function extractContent(html) {
 
 
 self.addEventListener('message', function(e) {
-  var url = "https://www.just-eat.co.uk/"+e.data+"/menu";
+  var name = e.data.name;
+  var stub = e.data.stub;
+  var url = "https://www.just-eat.co.uk/"+stub+"/menu";
   var pageHtml = loadPage(url);
   var postCodeRegEx= /\<span id=\"postcode\".*\<\/span\>/g;
   var cityRegEx= /\<span id=\"city\".*\<\/span\>/g;
@@ -24,7 +26,8 @@ self.addEventListener('message', function(e) {
   var city = pageHtml.match(cityRegEx)[0].replace(/(<([^>]+)>)/ig,"");
 
   var retData = {
-    stub: e.data,
+    stub: stub,
+    name: name,
     street: street,
     city: city,
     postcode: postcode

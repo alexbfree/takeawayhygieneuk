@@ -19,47 +19,54 @@ if (ratingsLookup == '""' || ratingsLookup == null) {
     ratingsLookup = JSON.parse(ratingsLookup);
 }
 
-/*
-var updateElementWithScore = function (element,urlStub) {
+var shiftLegendIcons = function () {
+    var legendDiv = document.querySelectorAll('div.c-listing-item-premier');
+    [].forEach.call(legendDiv, function(v,i,a) {
+        v.style.marginRight = '140px';
+    });
+}
+
+var updateElementWithScore = function (element,stub) {
     //console.dir(ratingsLookup[urlStub]);
 
-    var fsaImgLink = ratingsLookup[urlStub]['imageUrl'];
-    var fsaDateStr = ratingsLookup[urlStub]['date'];
-    var fsaRating = ratingsLookup[urlStub]['rating'];
+    var fsaImgLink = ratingsLookup[stub]['imageUrl'];
+    var fsaDateStr = ratingsLookup[stub]['date'];
+    var fsaRating = ratingsLookup[stub]['rating'];
     var ratingContent = `
-        <div class='fsapanel' alt="Rating Date ${escapeHtml(fsaDateStr)}" style="float: right;margin: 0;padding: 0 10px;">
-            <p class='fsarating' style="height: 61px;">
+        <div class='fsapanel' alt="Rating Date ${escapeHtml(fsaDateStr)}" style="float: right;margin-right: 20px;vertical-align: top;">
+            <p class='fsarating' style="height: 31px;">
               <img src='` + escapeHtml(fsaImgLink) + `'>
             </p>
         </div>
     `;
-    var container = element.querySelector('div.o-tile__details');
+    var container = element.querySelector('div.c-listing-item-info');
     var elDiv = element.querySelector('div.fsapanel');
     if (elDiv) {
         container.removeChild(elDiv);
     }
     element.parentElement.dataset.fsarank=fsaRating;
+    shiftLegendIcons();
     container.insertAdjacentHTML('afterbegin',ratingContent);
-};*/
+};
 
-/*
 var updateElementNoScore = function (element) {
-    var fsaImgLink = chrome.extension.getURL('/images/ratings/fhrs_awaitinginspection_en-gb.jpg');
+    var fsaImgLink = chrome.extension.getURL('/images/ratings/fhrs_nodataavailable_en-gb.jpg');
     var ratingContent = `
-        <div class='fsapanel' alt="No inspection information available." style="float: right;margin: 0;padding: 0 10px;">
-            <p class='fsarating' style="height: 61px;">
+        <div class='fsapanel' alt="No inspection information available." style="float: right;margin-right: 20px;vertical-align: top;">
+            <p class='fsarating' style="height: 31px;">
               <img src='` + escapeHtml(fsaImgLink) + `'>
             </p>
         </div>
     `;
-    var container = element.querySelector('div.o-tile__details');
+    var container = element.querySelector('div.c-listing-item-info');
     var elDiv = element.querySelector('div.fsapanel');
     if (elDiv) {
         container.removeChild(elDiv);
     }
     element.parentElement.dataset.fsarank=-2;
+    shiftLegendIcons();
     container.insertAdjacentHTML('afterbegin',ratingContent);
-};*/
+};
 
 function getLink() {
 
@@ -70,66 +77,62 @@ switch (currentSite) {
         var restaurants = document.querySelectorAll('section.c-listing-item a');
         var count = restaurants.length;
         [].forEach.call(restaurants, function(v,i,a) {
-            console.log(v.href.split('/')[3]);
-
+            var name = v.querySelector('h3.c-listing-item-title').innerText;
             var worker = new Worker(chrome.runtime.getURL('fsagetaddress.js'));
 
             worker.addEventListener('message', function(e) {
-                console.log('Worker said: ', e.data);
+
+               var container = v.querySelector('div.c-listing-item-info');
+                container.insertAdjacentHTML('afterbegin', '<div class="fsapanel" alt="Loading FSA Hygiene Rating" ' +
+                  'style="float: right;margin-right: 20px;vertical-align: top;">' +
+                  '<p class="fsarating" style="height: 31px;">' +
+                  '<img src="https://previews.dropbox.com/p/orig/AANBEYhHB7n30rFgI8XNtuWj2KTPdiewvIaxjC18BP1g9dX9WmQM8qenHEn57IggeV3WEdZ-WX8otUs8SuALVtHt_3FslvqvSVZDg_r7uaf-wvtd4036las24ryc5a3XZnORTz-lrRhU9pq9R9ycjQgstvA5FCp_ZQCY7uXZSQ_E_UkZccBHt0L5a9sP2oH7j08zMVESO6ehxz19TUvo8Rrc/p.gif?size=2048x1536&size_mode=3">' +
+                  '</p></div>');
+
+                if (ratingsLookup[e.data.stub]) {
+                    updateElementWithScore(v,e.data.stub);
+                } else {
+                    chrome.runtime.sendMessage({
+                        'name': e.data.name,
+                        'street': e.data.street,
+                        'city': e.data.city,
+                        'postcode': e.data.postcode
+                    }, function (response) {
+                        if (response.success === true) {
+                            //console.dir(response);
+                            var fsaRating = parseInt(response.rating);
+                            var fsaKey = response.key;
+                            var fsaDate = new Date(response.date);
+                            var fsaImgLink = chrome.extension.getURL('/images/ratings/' + fsaKey + '.jpg');
+                            var fsaDateStr = fsaDate.getDate() + '/' + (fsaDate.getMonth() + 1) + '/' + fsaDate.getFullYear();
+
+                            if (!fsaRating) {
+                                fsaRating=-1;
+                            }
+                            ratingsLookup[e.data.stub] = {
+                                key: fsaKey,
+                                imageUrl: fsaImgLink,
+                                date: fsaDateStr,
+                                rating: fsaRating
+                            };
+                            window.localStorage.setItem('ratingsLookup', JSON.stringify(ratingsLookup));
+                            updateElementWithScore(v,e.data.stub);
+
+                        } else {
+                            // nothing found
+                            //console.log('no data for '+e.data.stub);
+                            updateElementNoScore(v);
+                        }
+                    });
+                }
+
             }, false);
 
-            worker.postMessage(v.href.split('/')[3]); // Send data to our worker.
-
-            /*var urlStub      = v.href.split('/')[3].trim();
-            var address      = v.querySelector('p.c-restaurant__address').innerText;
-            var addressParts = address.split(',');
-            var postcode     = addressParts[addressParts.length - 1].trim();
-            var city         = addressParts[addressParts.length - 2].trim();
-            var street       = addressParts[addressParts.length - 3].trim();
-            var businessName = v.querySelector('div.o-tile__details h2').innerText.trim();
-
-            var container = v.querySelector('div.o-tile__details');
-            container.insertAdjacentHTML('afterbegin', '<div class="fsapanel" alt="Loading FSA Hygiene Rating" ' +
-              'style="float: right;margin: 0;margin-top:5px;margin-right:30px;padding: 0 10px;">' +
-              '<p class="fsarating" style="height: 61px;">' +
-              '<img src="https://previews.dropbox.com/p/orig/AANBEYhHB7n30rFgI8XNtuWj2KTPdiewvIaxjC18BP1g9dX9WmQM8qenHEn57IggeV3WEdZ-WX8otUs8SuALVtHt_3FslvqvSVZDg_r7uaf-wvtd4036las24ryc5a3XZnORTz-lrRhU9pq9R9ycjQgstvA5FCp_ZQCY7uXZSQ_E_UkZccBHt0L5a9sP2oH7j08zMVESO6ehxz19TUvo8Rrc/p.gif?size=2048x1536&size_mode=3">' +
-              '</p></div>');
-
-            if (ratingsLookup[urlStub]) {
-              updateElementWithScore(v,urlStub);
-            } else {
-                chrome.runtime.sendMessage({
-                    'name': businessName,
-                    'street': street,
-                    'city': city,
-                    'postcode': postcode
-                }, function (response) {
-                    if (response.success === true) {
-                        //console.dir(response);
-                        var fsaRating = parseInt(response.rating);
-                        var fsaKey = response.key;
-                        var fsaDate = new Date(response.date);
-                        var fsaImgLink = chrome.extension.getURL('/images/ratings/' + fsaKey + '.jpg');
-                        var fsaDateStr = fsaDate.getDate() + '/' + (fsaDate.getMonth() + 1) + '/' + fsaDate.getFullYear();
-
-                        if (!fsaRating) {
-                            fsaRating=-1;
-                        }
-                        ratingsLookup[urlStub] = {
-                            key: fsaKey,
-                            imageUrl: fsaImgLink,
-                            date: fsaDateStr,
-                            rating: fsaRating
-                        };
-                        window.localStorage.setItem('ratingsLookup', JSON.stringify(ratingsLookup));
-                        updateElementWithScore(v,urlStub);
-
-                    } else {
-                        // nothing found
-                        updateElementNoScore(v);
-                    }
-                });
-            }*/
+            var dataForWorker = {
+                stub: v.href.split('/')[3],
+                name: name
+            };
+            worker.postMessage(dataForWorker); // Send data to our worker.
         });
         // TODO wait until everything complete
         /*document.querySelector('div.c-serp-filter__list[data-ft=sortByFilter] ul').insertAdjacentHTML('afterbegin','<li class="fsaranksort"><a href="#"><span class="o-radio"></span>Hygiene Rating</a></li>');
