@@ -34,49 +34,11 @@
       ],
       "js": [
         "jquery-3.2.1.min.js",
+        "patch-worker.js",
         "fsarank.js"
       ],
       "css": [
         "/styles/justeat.css"
-      ],
-      "run_at": "document_end"
-    },
-    {
-      "matches": [
-        "https://hungryhouse.co.uk/*"
-      ],
-      "js": [
-        "jquery-3.2.1.min.js",
-        "fsainsert.js"
-      ],
-      "css": [
-        "/styles/hungryhouse.css"
-      ],
-      "run_at": "document_end"
-    },
-    {
-      "matches": [
-        "https://deliveroo.co.uk/*"
-      ],
-      "js": [
-        "jquery-3.2.1.min.js",
-        "fsainsert.js"
-      ],
-      "css": [
-        "/styles/deliveroo.css"
-      ],
-      "run_at": "document_end"
-    },
-    {
-      "matches": [
-        "https://www.kukd.com/restaurant/*"
-      ],
-      "js": [
-        "jquery-3.2.1.min.js",
-        "fsainsert.js"
-      ],
-      "css": [
-        "/styles/kukd.css"
       ],
       "run_at": "document_end"
     }
@@ -92,6 +54,7 @@
     "http://ratings.food.gov.uk/*"
   ],
   "web_accessible_resources": [
-    "/images/ratings/*"
+    "/images/ratings/*",
+    "fsagetaddress.js"
   ]
 }
