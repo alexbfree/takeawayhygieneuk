@@ -110,10 +110,6 @@ var updateElementNoScore = function (element) {
     container.insertAdjacentHTML('afterbegin',ratingContent);
 };
 
-function getLink() {
-
-}
-
 switch (currentSite) {
     case 'justeat': {
         var restaurants = document.querySelectorAll('section.c-listing-item a');
@@ -180,7 +176,7 @@ switch (currentSite) {
 
         var ul = document.querySelector('ul.c-sortBy-popoverList');
         var hygieneLi = '<li class="c-sortBy-item"><label class="o-formControl-label" for="fsarank" tabindex=“-1">' +
-            '<input class="o-formControl-input" type="radio" id="fsarank" name="sortbyColumn" value="fsarank" checked="checked">' +
+            '<input class="o-formControl-input" type="radio" id="fsarank" name="sortbyColumn" value="fsarank">' +
             '<span class="o-formControl-indicator o-formControl-indicator--radio"></span>Hygiene Rating</label></li>';
         ul.insertAdjacentHTML('afterbegin',hygieneLi);
         var hyLi = ul.querySelectorAll('ul.c-sortBy-popoverList li')[0];
