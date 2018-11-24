@@ -23,18 +23,15 @@ function sortDivs() {
             var containerSelector = containerSelectors[i];
             var container = document.querySelector(containerSelector);
             if (container && sections && sections.length>0) {
-                var reversedSections = [];
-                for(var m in sections) {
-                    reversedSections.push(sections[m]);
-                }
-                for(var r in reversedSections) {
-                    var section = reversedSections[r];
+
+                for(var r in sections) {
+                    var section = sections[r];
                     if (section instanceof Node) {
                         container.appendChild(section);
                     } else {
-                        console.log('container '+i+', score '+scores[m]," section/restaurant was: ");
-                        console.dir(section);
-                        console.log(i,k,r);
+                        //console.log('container '+i+', score '+scores[m]," section/restaurant was: ");
+                        //console.dir(section);
+                        //console.log(i,k,r);
                     }
                 }
             }
