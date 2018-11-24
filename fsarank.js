@@ -121,13 +121,15 @@ switch (currentSite) {
               '<img class="fsaloading">' +
               '</p></div>'); //src="http://bowdb.alexbowyer.com/fsa/reload-61px.gif"
 
-            var worker = new Worker(chrome.runtime.getURL('fsagetaddress.js'));
+            let stub = v.href.split('/')[3];
 
-            worker.addEventListener('message', function(e) {
+            if (ratingsLookup[stub]) {
+                updateElementWithScore(v,stub);
+            }
+            else {
+                var worker = new Worker(chrome.runtime.getURL('fsagetaddress.js'));
 
-                if (ratingsLookup[e.data.stub]) {
-                    updateElementWithScore(v,e.data.stub);
-                } else {
+                worker.addEventListener('message', function (e) {
                     chrome.runtime.sendMessage({
                         'name': e.data.name,
                         'street': e.data.street,
@@ -136,14 +138,14 @@ switch (currentSite) {
                     }, function (response) {
                         if (response.success === true) {
                             //console.dir(response);
-                            var fsaRating = parseInt(response.rating);
-                            var fsaKey = response.key;
-                            var fsaDate = new Date(response.date);
+                            var fsaRating  = parseInt(response.rating);
+                            var fsaKey     = response.key;
+                            var fsaDate    = new Date(response.date);
                             var fsaImgLink = chrome.extension.getURL('/images/ratings/' + fsaKey + '.jpg');
                             var fsaDateStr = fsaDate.getDate() + '/' + (fsaDate.getMonth() + 1) + '/' + fsaDate.getFullYear();
 
                             if (!fsaRating) {
-                                fsaRating=-1;
+                                fsaRating = -1;
                             }
                             ratingsLookup[e.data.stub] = {
                                 key: fsaKey,
@@ -152,7 +154,7 @@ switch (currentSite) {
                                 rating: fsaRating
                             };
                             window.localStorage.setItem('ratingsLookup', JSON.stringify(ratingsLookup));
-                            updateElementWithScore(v,e.data.stub);
+                            updateElementWithScore(v, e.data.stub);
 
                         } else {
                             // nothing found
@@ -160,15 +162,14 @@ switch (currentSite) {
                             updateElementNoScore(v);
                         }
                     });
-                }
+                }, false);
 
-            }, false);
-
-            var dataForWorker = {
-                stub: v.href.split('/')[3],
-                name: name
-            };
-            worker.postMessage(dataForWorker); // Send data to our worker.
+                var dataForWorker = {
+                    stub: v.href.split('/')[3],
+                    name: name
+                };
+                worker.postMessage(dataForWorker); // Send data to our worker.
+            }
         });
 
         var ul = document.querySelector('ul.c-sortBy-popoverList');
