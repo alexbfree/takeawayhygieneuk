@@ -1,4 +1,48 @@
-// Never trust data you didn't prepare yourself :P
+function sortDivs() {
+    var containerSelectors = ['div[data-test-id="openrestaurants"]',
+        'div[data-test-id="closedrestaurants"]',
+        'div[data-test-id="offlinerestaurants"]'];
+    var scores         = ['-2', '-1', '1', '2', '3', '4', '5'];
+    var rankedSections = [];
+    for (var i in containerSelectors) {
+        var containerSelector = containerSelectors[i];
+        var container = document.querySelector(containerSelector);
+        rankedSections[i] = [];
+        if (container) {
+            for (var j in scores) {
+                var score    = scores[j];
+                var selector = 'section[data-fsarank="' + score + '"]';
+                var sections = container.querySelectorAll(selector);
+                rankedSections[i].unshift(sections);
+            }
+        }
+    }
+    for (var i in rankedSections) {
+        for (var k in rankedSections[i]) {
+            var sections = rankedSections[i][k];
+            var containerSelector = containerSelectors[i];
+            var container = document.querySelector(containerSelector);
+            if (container && sections && sections.length>0) {
+                var reversedSections = [];
+                for(var m in sections) {
+                    reversedSections.push(sections[m]);
+                }
+                for(var r in reversedSections) {
+                    var section = reversedSections[r];
+                    if (section instanceof Node) {
+                        container.appendChild(section);
+                    } else {
+                        console.log('container '+i+', score '+scores[m]," section/restaurant was: ");
+                        console.dir(section);
+                        console.log(i,k,r);
+                    }
+                }
+            }
+        }
+    }
+
+}
+
 function escapeHtml(str) {
     var div = document.createElement('div');
     div.appendChild(document.createTextNode(str));
@@ -80,8 +124,8 @@ switch (currentSite) {
             var container = v.querySelector('div.c-listing-item-info');
             container.insertAdjacentHTML('afterbegin', '<div class="fsapanel" alt="Loading FSA Hygiene Rating" ' +
               'style="float: right;margin-right: 20px;vertical-align: top;">' +
-              '<p class="fsarating" style="height: 31px;margin-top:0px;">' +
-              '<img src="https://previews.dropbox.com/p/orig/AANBEYhHB7n30rFgI8XNtuWj2KTPdiewvIaxjC18BP1g9dX9WmQM8qenHEn57IggeV3WEdZ-WX8otUs8SuALVtHt_3FslvqvSVZDg_r7uaf-wvtd4036las24ryc5a3XZnORTz-lrRhU9pq9R9ycjQgstvA5FCp_ZQCY7uXZSQ_E_UkZccBHt0L5a9sP2oH7j08zMVESO6ehxz19TUvo8Rrc/p.gif?size=2048x1536&size_mode=3">' +
+              '<p class="fsarating" style="height: 31px;width=110px;margin-top:0px;">' +
+              '<img src="http://bowdb.alexbowyer.com/fsa/reload-61px.gif">' +
               '</p></div>');
 
             var worker = new Worker(chrome.runtime.getURL('fsagetaddress.js'));
@@ -133,17 +177,21 @@ switch (currentSite) {
             };
             worker.postMessage(dataForWorker); // Send data to our worker.
         });
-        // TODO wait until everything complete
-        /*document.querySelector('div.c-serp-filter__list[data-ft=sortByFilter] ul').insertAdjacentHTML('afterbegin','<li class="fsaranksort"><a href="#"><span class="o-radio"></span>Hygiene Rating</a></li>');
-        document.querySelector('li.fsaranksort').onclick=function(e) {
-            var filters = document.querySelectorAll('div.c-serp-filter__list[data-ft=sortByFilter] ul li'),i;
-            for (i = 0; i < divs.length; ++i) {
 
-            }
-            document.querySelector('li.is-selected').removeAttribute('data-ft');
-            document.querySelector('li.is-selected').classList.remove('is-selected');
-            // TODO need to manually put back the A link for the now no longer selected sort
-            e.target.parentElement.classList.add('is-selected');
-        }*/
+        var ul = document.querySelector('ul.c-sortBy-popoverList');
+        var hygieneLi = '<li class="c-sortBy-item"><label class="o-formControl-label" for="fsarank" tabindex=“-1">' +
+            '<input class="o-formControl-input" type="radio" id="fsarank" name="sortbyColumn" value="fsarank" checked="checked">' +
+            '<span class="o-formControl-indicator o-formControl-indicator--radio"></span>Hygiene Rating</label></li>';
+        ul.insertAdjacentHTML('afterbegin',hygieneLi);
+        var hyLi = ul.querySelectorAll('ul.c-sortBy-popoverList li')[0];
+
+        hyLi.addEventListener("click", function() {
+            console.log('click');
+            sortDivs();
+        }, false);
+
+
+        // TODO wait until everything complete
+
     }
 };

@@ -26,3 +26,7 @@ div.fsanorating {
 p.fsarating {
     margin-top: 0px;
 }
+
+section[data-test-id="offlinerestaurant"] p.fsarating img {
+    opacity: .5;
+}
