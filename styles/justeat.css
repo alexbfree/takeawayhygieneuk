@@ -30,3 +30,58 @@ p.fsarating {
 section[data-test-id="offlinerestaurant"] p.fsarating img {
     opacity: .5;
 }
+
+img.fsaloading {
+    content: url('http://bowdb.alexbowyer.com/fsa/reload-61px.gif');
+}
+
+img.fsaAI {
+    content: url('chrome-extension://__MSG_@@extension_id__/images/ratings/fhrs_awaitinginspection_en-gb.jpg');
+}
+
+img.fsaAP {
+    content: url('chrome-extension://__MSG_@@extension_id__/images/ratings/fhrs_awaitingpublication_en-gb.jpg');
+}
+
+img.fsaE {
+    content: url('chrome-extension://__MSG_@@extension_id__/images/ratings/fhrs_exempt_en-gb.jpg');
+}
+
+img.fsa-2 {
+    content: url('chrome-extension://__MSG_@@extension_id__/images/ratings/fhrs_nodataavailable_en-gb.jpg');
+}
+
+img.fsa-1 {
+    content: url('chrome-extension://__MSG_@@extension_id__/images/ratings/fhrs_nodataavailable_en-gb.jpg');
+}
+
+img.fsa0 {
+    content: url('chrome-extension://__MSG_@@extension_id__/images/ratings/fhrs_0_en-gb.jpg');
+}
+
+img.fsa1 {
+    content: url('chrome-extension://__MSG_@@extension_id__/images/ratings/fhrs_1_en-gb.jpg');
+}
+
+
+img.fsa2 {
+    content: url('chrome-extension://__MSG_@@extension_id__/images/ratings/fhrs_2_en-gb.jpg');
+}
+
+
+img.fsa3 {
+    content: url('chrome-extension://__MSG_@@extension_id__/images/ratings/fhrs_3_en-gb.jpg');
+}
+
+
+img.fsa4 {
+    content: url('chrome-extension://__MSG_@@extension_id__/images/ratings/fhrs_4_en-gb.jpg');
+}
+
+img.fsa5 {
+    content: url('chrome-extension://__MSG_@@extension_id__/images/ratings/fhrs_5_en-gb.jpg');
+}
+
+img.fsaNA {
+    content: url('chrome-extension://__MSG_@@extension_id__/images/ratings/fhrs_nodataavailable_en-gb.jpg');
+}

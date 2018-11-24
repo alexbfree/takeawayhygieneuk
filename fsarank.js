@@ -79,10 +79,10 @@ var updateElementWithScore = function (element,stub) {
     var ratingContent = `
         <div class='fsapanel' alt="Rating Date ${escapeHtml(fsaDateStr)}" style="float: right;margin-right: 20px;vertical-align: top;">
             <p class='fsarating' style="height: 31px;margin-top:0px;">
-              <img src='` + escapeHtml(fsaImgLink) + `'>
+              <img class='fsa${fsaRating}'>
             </p>
         </div>
-    `;
+    `; // src='` + escapeHtml(fsaImgLink) + `'
     var container = element.querySelector('div.c-listing-item-info');
     var elDiv = element.querySelector('div.fsapanel');
     if (elDiv) {
@@ -97,10 +97,10 @@ var updateElementNoScore = function (element) {
     var ratingContent = `
         <div class='fsapanel' alt="No inspection information available." style="float: right;margin-right: 20px;vertical-align: top;">
             <p class='fsarating' style="height: 31px;margin-top:0px;">
-              <img src='` + escapeHtml(fsaImgLink) + `'>
+              <img class='fsaNA'> 
             </p>
         </div>
-    `;
+    `; // src='` + escapeHtml(fsaImgLink) + `'
     var container = element.querySelector('div.c-listing-item-info');
     var elDiv = element.querySelector('div.fsapanel');
     if (elDiv) {
@@ -125,8 +125,8 @@ switch (currentSite) {
             container.insertAdjacentHTML('afterbegin', '<div class="fsapanel" alt="Loading FSA Hygiene Rating" ' +
               'style="float: right;margin-right: 20px;vertical-align: top;">' +
               '<p class="fsarating" style="height: 31px;width=110px;margin-top:0px;">' +
-              '<img src="http://bowdb.alexbowyer.com/fsa/reload-61px.gif">' +
-              '</p></div>');
+              '<img class="fsaloading">' +
+              '</p></div>'); //src="http://bowdb.alexbowyer.com/fsa/reload-61px.gif"
 
             var worker = new Worker(chrome.runtime.getURL('fsagetaddress.js'));
 
