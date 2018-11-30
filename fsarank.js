@@ -130,38 +130,70 @@ switch (currentSite) {
                 var worker = new Worker(chrome.runtime.getURL('fsagetaddress.js'));
 
                 worker.addEventListener('message', function (e) {
-                    chrome.runtime.sendMessage({
-                        'name': e.data.name,
-                        'street': e.data.street,
-                        'city': e.data.city,
-                        'postcode': e.data.postcode
-                    }, function (response) {
-                        if (response.success === true) {
-                            //console.dir(response);
-                            var fsaRating  = parseInt(response.rating);
-                            var fsaKey     = response.key;
-                            var fsaDate    = new Date(response.date);
-                            var fsaImgLink = chrome.extension.getURL('/images/ratings/' + fsaKey + '.jpg');
-                            var fsaDateStr = fsaDate.getDate() + '/' + (fsaDate.getMonth() + 1) + '/' + fsaDate.getFullYear();
 
-                            if (!fsaRating) {
-                                fsaRating = -1;
-                            }
-                            ratingsLookup[e.data.stub] = {
-                                key: fsaKey,
-                                imageUrl: fsaImgLink,
-                                date: fsaDateStr,
-                                rating: fsaRating
-                            };
-                            window.localStorage.setItem('ratingsLookup', JSON.stringify(ratingsLookup));
-                            updateElementWithScore(v, e.data.stub);
-
-                        } else {
-                            // nothing found
-                            //console.log('no data for '+e.data.stub);
-                            updateElementNoScore(v);
+                    var namesToCheck = [e.data.name];
+                    var punctRE = /[\u2000-\u206F\u2E00-\u2E7F\\!"#$@%&()*+,\-.\/:;<=>?@\[\]^_{|}~]/g;
+                    var spaceRE = /\s+/g;
+                    var cleanedName = e.data.name;
+                    cleanedName = cleanedName.replace(punctRE, '').replace(spaceRE, ' ');
+                    if (cleanedName!=e.data.name) {
+                        namesToCheck.push(cleanedName);
+                    }
+                    var splitNameParts = cleanedName.split(' ');
+                    var splitNamePartsCopy = splitNameParts.slice(0);
+                    while (splitNameParts.length>1) {
+                        splitNameParts = splitNameParts.slice(0, -1);
+                        if (splitNameParts.length == 2) {
+                            namesToCheck.push(splitNameParts[1]);
                         }
-                    });
+                        namesToCheck.push(splitNameParts.join(' '));
+                    }
+                    while (splitNamePartsCopy.length>1 && splitNamePartsCopy[0]!="The") {
+                        splitNamePartsCopy = splitNamePartsCopy.slice(1);
+                        if (splitNamePartsCopy.length == 2) {
+                            namesToCheck.push(splitNamePartsCopy[1]);
+                        }
+                        namesToCheck.push(splitNamePartsCopy.join(' '));
+                    }
+                    for (var i in namesToCheck) {
+                        var name = namesToCheck[i];
+                        chrome.runtime.sendMessage({
+                            'name': name,
+                            'street': e.data.street,
+                            'city': e.data.city,
+                            'postcode': e.data.postcode
+                        }, function (response) {
+                            //console.dir(response);
+                            if (response.success === true) {
+                                var fsaRating  = parseInt(response.rating);
+                                var fsaKey     = response.key;
+                                var fsaDate    = new Date(response.date);
+                                var fsaImgLink = chrome.extension.getURL('/images/ratings/' + fsaKey + '.jpg');
+                                var fsaDateStr = fsaDate.getDate() + '/' + (fsaDate.getMonth() + 1) + '/' + fsaDate.getFullYear();
+
+                                if (!fsaRating) {
+                                    fsaRating = -1;
+                                }
+                                if (!ratingsLookup[e.data.stub]) {
+                                    ratingsLookup[e.data.stub] = {
+                                        key: fsaKey,
+                                        imageUrl: fsaImgLink,
+                                        date: fsaDateStr,
+                                        rating: fsaRating
+                                    };
+                                }
+                                window.localStorage.setItem('ratingsLookup', JSON.stringify(ratingsLookup));
+                                //console.log('found score for '+e.data.stub+", ("+name+") - updating page");
+                                updateElementWithScore(v, e.data.stub);
+
+                            } else {
+                                // nothing found
+                                //console.log('no data for '+e.data.stub);
+                                //console.log('no data found for '+e.data.stub+", ("+name+")");
+                                updateElementNoScore(v);
+                            }
+                        });
+                    }
                 }, false);
 
                 var dataForWorker = {
